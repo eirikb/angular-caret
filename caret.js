@@ -30,15 +30,17 @@ angular.module('eb.caret', [])
   return {
     restrict: 'A',
     scope: {
-      ebCaret: '='
+      ebCaret: '=',
     },
     link: function(scope, element, attrs) {
-      element.on('keyup click', function(event) {
+      if (!scope.ebCaret) scope.ebCaret = {};
+
+      element.on('keydown keyup click', function(event) {
         scope.$apply(function() {
-          scope.ebCaret = getPos(element[0]);
+          scope.ebCaret.get = getPos(element[0]);
         });
       });
-      scope.$watch('ebCaret', function(newVal) {
+      scope.$watch('ebCaret.set', function(newVal) {
         if (typeof newVal === 'undefined') return;
         setPos(element[0], newVal);
       });
